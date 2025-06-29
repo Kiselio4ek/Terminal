@@ -2,21 +2,123 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Сканер штрих-кода</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { margin: 0; font-family: sans-serif; background: #f0f0f0; }
-        #qr-reader { width: 100%; border: none; }
-        #qr-reader__status_span { display: none !important; } /* Скрываем лишние надписи */
-        p { text-align: center; padding: 10px; background: white; margin: 0; }
+        :root {
+            --bg-color: #2c3e50;
+            --primary-color: #3498db;
+            --text-color: #ecf0f1;
+            --scanner-size: 280px;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #scanner-container {
+            position: relative;
+            width: var(--scanner-size);
+            height: var(--scanner-size);
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+        }
+        #qr-reader {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* Стилизация рамки сканера */
+        .scanner-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        /* Лазерная линия */
+        .scanner-frame::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            box-shadow: 0 0 10px var(--primary-color);
+            animation: scan-anim 2.5s infinite linear;
+        }
+        @keyframes scan-anim {
+            0% { top: 0; }
+            50% { top: calc(100% - 3px); }
+            100% { top: 0; }
+        }
+        /* Уголки рамки */
+        .scanner-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            box-shadow: inset 0 0 0 4px var(--primary-color);
+        }
+        #status-text {
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: center;
+            padding: 0 15px;
+        }
+        #cancel-button {
+            margin-top: 20px;
+            padding: 12px 24px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #loading-indicator {
+            font-size: 18px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
-    <p>Наведите камеру на штрих-код</p>
-    <div id="qr-reader"></div>
+    <h3>Сканер штрих-кодов</h3>
+    
+    <div id="scanner-container">
+        <div id="qr-reader"></div>
+        <div class="scanner-frame"></div>
+    </div>
+    
+    <p id="status-text">
+        <span id="loading-indicator">Включаю камеру...</span>
+    </p>
+
+    <button id="cancel-button">Отмена</button>
 
     <script src="https://unpkg.com/html5-qrcode/html5-qrcode.min.js"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="./scanner.js"></script>
 </body>
 </html>
