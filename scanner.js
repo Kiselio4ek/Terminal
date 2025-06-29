@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // --- ОБХОДНОЙ ПУТЬ ---
         // Вместо tg.sendData() делаем прямой запрос к нашему боту
-        const webhookUrl = 'https://d7c9-188-163-12-90.ngrok-free.app/barcode'; // Мы заменим это вручную при тесте
+        const webhookUrl = 'https://b072-188-163-12-90.ngrok-free.app/barcode'; // Мы заменим это вручную при тесте
         
         console.log(`Отправляю POST-запрос на ${webhookUrl}`);
         
