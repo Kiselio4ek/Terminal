@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function onScanSuccess(decodedText, decodedResult) {
         // !!! ВАЖНО: Перед загрузкой на GitHub, здесь должен быть актуальный адрес от ngrok !!!
-        const webhookUrl = 'https://ВАШ-АКТУАЛЬНЫЙ-NGROK-АДРЕС.ngrok-free.app/barcode'; 
+        const webhookUrl = 'https://16c3-188-163-12-90.ngrok-free.app/barcode'; 
         
         fetch(webhookUrl, {
             method: 'POST',
