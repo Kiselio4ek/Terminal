@@ -1,4 +1,4 @@
-// scanner.js - Финальная рабочая версия
+// scanner.js - Финальная рабочая версия с исправлением множественных отправок
 
 document.addEventListener("DOMContentLoaded", function() {
     const tg = window.Telegram.WebApp;
@@ -11,8 +11,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const chatId = tg.initDataUnsafe.user.id;
 
+    // --- ФУНКЦИЯ БЫЛА ИЗМЕНЕНА ---
     function onScanSuccess(decodedText, decodedResult) {
-        // !!! ВАЖНО: Перед загрузкой на GitHub, здесь должен быть актуальный адрес от ngrok !!!
+        
+        // --- РЕШЕНИЕ ПРОБЛЕМЫ МНОЖЕСТВЕННЫХ ОТПРАВОК ---
+        // Немедленно останавливаем сканер, чтобы он не отправлял повторные запросы.
+        // Это самая важная строчка, которую мы добавили.
+        html5QrcodeScanner.clear().catch(error => {
+            console.error("Не удалось остановить сканер.", error);
+        });
+        // --- КОНЕЦ РЕШЕНИЯ ---
+
+        console.log(`Код отсканирован: ${decodedText}. Отправляю запрос...`);
+
         const webhookUrl = 'https://16c3-188-163-12-90.ngrok-free.app/barcode'; 
         
         fetch(webhookUrl, {
@@ -31,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(data => {
             console.log('Отправка успешна:', data);
+            // Закрываем окно только после успешной отправки
             tg.close();
         })
         .catch(error => {
@@ -41,6 +53,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function onScanFailure(error) { /* Игнорируем ошибки, когда камера не находит код */ }
 
+    // Важно: создаем объект сканера здесь, чтобы он был доступен в onScanSuccess
     let html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: { width: 250, height: 150 }}, false);
+    
     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 });
