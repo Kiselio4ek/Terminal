@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сканер штрих-кода</title>
+    <style>
+        body { margin: 0; font-family: sans-serif; background: #f0f0f0; }
+        #qr-reader { width: 100%; border: none; }
+        #qr-reader__status_span { display: none !important; } /* Скрываем лишние надписи */
+        p { text-align: center; padding: 10px; background: white; margin: 0; }
+    </style>
+</head>
+<body>
+    <p>Наведите камеру на штрих-код</p>
+    <div id="qr-reader"></div>
+
+    <script src="https://unpkg.com/html5-qrcode/html5-qrcode.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="./scanner.js"></script>
+</body>
+</html>
